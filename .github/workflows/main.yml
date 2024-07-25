@@ -29,6 +29,14 @@ jobs:
       run: npm test
       working-directory: ./node-app
 
-    - name: Start Node.js app
-      run: npm start
-      working-directory: ./node-app
+    - name: Stop existing Node.js app
+      run: |
+        if pgrep -f "node server.js"; then
+          pkill -f "node server.js"
+        fi
+      shell: bash
+
+    - name: Start Node.js app in background
+      run: |
+        nohup npm start --prefix ./node-app &
+      shell: bash
